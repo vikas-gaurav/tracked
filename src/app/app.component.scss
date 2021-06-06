@@ -1,0 +1,55 @@
+.app-header{
+    height: 70px;
+    .active{
+        background-color: lightgray;
+    }
+}
+.side-bar{
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: calc(100vh - 70px);
+    width: 20%;
+    .detail-card{
+        border-bottom: 1px solid gray;
+        min-height: 65px;
+        .truck-number{
+                color: black;
+            }
+        &.error{
+            .truck-number{
+                color: white;
+            }
+        }
+    }
+}
+.map-view{
+    width: 80%;
+}
+//utility classes
+.cursor-pointer{
+    cursor: pointer;
+}
+.cursor-move{
+    cursor:move;
+}
+.font-semibold{
+    font-weight: 600;
+}
+.font-bold{
+    font-weight: 800;
+}
+.font-small{
+    font-size: 75%;
+}
+.hover-shadow{
+    &:hover{
+        box-shadow: 0 0 10px gray;
+    }
+}
+.hover-btn-effect{
+    transition: 0.3s;
+    &:hover{
+        opacity: .8;
+    }
+}
+

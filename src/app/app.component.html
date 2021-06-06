@@ -1,0 +1,74 @@
+<div class="app-container vh-100 container-fluid shadow">
+  <!--The app header-->
+  <div class="row app-header sticky-top">
+    <div [ngClass]="{'col-2 cursor-pointer py-2 text-center font-semibold header-menu-item':true, 'active':activeItem==='total'}"
+      (click)="activateItem('total')">
+      <span class="total-truck d-block font-small">Total Trucks</span>
+      <span *ngIf="totalTrucks" class="count">{{totalTrucks.length}}</span>
+    </div>
+    <div [ngClass]="{'col-2 cursor-pointer py-2 text-center font-semibold header-menu-item':true, 'active':activeItem==='running'}"
+      (click)="activateItem('running')">
+      <span class="running-truck d-block font-small">Running Trucks</span>
+      <span *ngIf="runningTrucks" class="count">{{runningTrucks.length}}</span>
+    </div>
+    <div [ngClass]="{'col-2 cursor-pointer py-2 text-center font-semibold header-menu-item':true, 'active':activeItem==='stopped'}"
+      (click)="activateItem('stopped')">
+      <span class="stopped-truck d-block font-small">Stopped Trucks</span>
+      <span *ngIf="stoppedTrucks" class="count">{{stoppedTrucks.length}}</span>
+    </div>
+    <div [ngClass]="{'col-2 cursor-pointer py-2 text-center font-semibold header-menu-item':true, 'active':activeItem==='idle'}"
+      (click)="activateItem('idle')">
+      <span class="idle-truck d-block font-small">Idle Trucks</span>
+      <span *ngIf="idleTrucks" class="count">{{idleTrucks.length}}</span>
+    </div>
+    <div [ngClass]="{'col-2 cursor-pointer py-2 text-center font-semibold header-menu-item':true, 'active':activeItem==='error'}"
+      (click)="activateItem('error')">
+      <span class="error-truck d-block font-small">Error Trucks</span>
+      <span *ngIf="errorTrucks" class="count">{{errorTrucks.length}}</span>
+    </div>
+    <div class="col-2 cursor-pointer py-2 text-center select-state">
+      <select class="form-select" aria-label="select trucks">
+        <option selected>Select</option>
+        <ng-container *ngFor="let truck of filteredList">
+          <option [value]="truck.truckNumber">{{truck.truckNumber}}</option>
+        </ng-container>
+      </select>
+    </div>
+  </div>
+  <!-- app body -->
+  <div class="d-flex row">
+    <!-- side bar -->
+    <div class="side-bar col-2 px-0 border-right">
+      <div [ngClass]="['detail-card d-flex p-2',errorTrucks.includes(truck)?'error bg-danger text-white':'text-muted']" *ngFor="let truck of filteredList; index as truckIndex">
+        <div class="left w-75">
+          <span [ngClass]="['truck-number font-semibold']">{{truck.truckNumber}}</span><span class="px-1 fa fa-truck"></span>
+          <span *ngIf="truck.lastRunningState && truck.lastRunningState.stopStartTime" 
+            class="d-inline-block font-semibold font-small truck-status">
+            {{(truck.lastRunningState.truckRunningState === 1? 'Running since': 'Stopped since')}} {{evaElapsedDuration(truck.lastRunningState.stopStartTime)}}</span>
+        </div>
+        <div class="right w-25">
+          <span *ngIf="truck.lastWaypoint && truck.lastWaypoint.createTime" 
+            class="d-inline-block time font-small float-end">{{evaElapsedDuration(truck.lastWaypoint.createTime)}}</span>
+          <span *ngIf="truck.lastWaypoint && truck.lastWaypoint.speed" 
+            class="d-inline-block speed font-small float-end">{{truck.lastWaypoint.speed}} k/h</span>
+        </div>
+        
+      </div>
+    </div>
+    <!-- map view -->
+    <div class="map-view col-12 px-0 position-relative">
+      <div class="bg-white h-100 overflow-hidden">
+        <google-map height="100%" width="100%"
+        [zoom]="zoom"
+        [center]="center"
+        [options]="mapOptions">
+        <ng-container *ngFor="let marker of markers">
+          <map-marker [options]="marker.options" [position]="marker.position"></map-marker>
+        </ng-container>
+      </google-map>
+      </div>
+    </div>
+  </div>
+</div>
+
+
